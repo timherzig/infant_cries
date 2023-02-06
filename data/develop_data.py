@@ -7,12 +7,9 @@ import tensorflow_io as tfio
 
 from tensorflow import keras
 
-def load_develop_data():
-    audio = tfio.audio.AudioIOTensor('/home/tim/Documents/dfki/ds/cv-corpus-10.0-2022-07-04-pl/cv-corpus-10.0-2022-07-04/pl/clips/common_voice_pl_20547774.mp3')
-
-    # audio = tfio.audio.resample(audio, audio.rate, 16000)
-
-    return audio
+"""
+This class was made to experiment with TF dataloaders, not meant to be used for anything else
+"""
 
 class DevelopData(keras.utils.Sequence):
     """Data loader to test implementation"""
