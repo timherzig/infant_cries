@@ -2,5 +2,6 @@ model:
   name: 'https://tfhub.dev/google/trillsson5/1'
 
 data:
+  develop: true
 
 mode: 'train'
