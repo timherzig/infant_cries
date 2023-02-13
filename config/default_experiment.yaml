@@ -2,6 +2,12 @@ model:
   name: 'https://tfhub.dev/google/trillsson5/1'
 
 data:
-  develop: true
+  develop: false
+  batch_size: 4
+  root_dir: '/home/tim/Documents/dfki/shared_projects/infant_cries/BabyCry'
+  shuffle: true
 
 mode: 'train'
+
+train_config:
+  epochs: 2
