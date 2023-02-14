@@ -33,12 +33,6 @@ class BabyCry(keras.utils.Sequence):
 
         label_batch = np.asarray([label for label in batch['label']])
 
-        # TODO: figure out the dimensionalities
-        print('-----------------------------------------')
-        print(audio_batch.shape)
-        print(label_batch.shape)
-        print('-----------------------------------------')
-
         return audio_batch, label_batch
 
 
