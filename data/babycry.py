@@ -13,6 +13,7 @@ class BabyCry(keras.utils.Sequence):
     def __init__(self, batch_size, root_dir, shuffle):
         self.shuffle = shuffle
         self.batch_size = batch_size
+        self.root_dir = root_dir
 
         self.df = pd.read_csv(os.path.join(root_dir, 'babycry_extracted.csv'))
 
@@ -26,7 +27,7 @@ class BabyCry(keras.utils.Sequence):
         """Returns a tupel (input, target)"""
         batch = self.df.iloc[idx * self.batch_size:(idx + 1) * self.batch_size]
 
-        audio_batch = [librosa.load(path, sr=16000)[0] for path in batch['audio']]
+        audio_batch = [librosa.load(os.path.join(self.root_dir, path), sr=16000)[0] for path in batch['audio']]
 
         max_len = max(len(row) for row in audio_batch)
         audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
