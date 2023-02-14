@@ -26,8 +26,12 @@ class BabyCry(keras.utils.Sequence):
         """Returns a tupel (input, target)"""
         batch = self.df.iloc[idx * self.batch_size:(idx + 1) * self.batch_size]
 
-        audio_batch = np.asarray([librosa.load(path, sr=16000)[0] for path in batch['audio']])
-        label_batch = np.asarray([np.float32(label) for label in batch['label']])
+        audio_batch = [librosa.load(path, sr=16000)[0] for path in batch['audio']]
+
+        max_len = max(len(row) for row in audio_batch)
+        audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
+
+        label_batch = np.asarray([label for label in batch['label']])
 
         # TODO: figure out the dimensionalities
         print('-----------------------------------------')

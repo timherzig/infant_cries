@@ -1,5 +1,6 @@
 import numpy as np
 import tensorflow as tf
+import tensorflow_hub as hub
 
 from omegaconf import OmegaConf
 from argparse import ArgumentParser
@@ -21,12 +22,13 @@ def main(args):
 
     train_ds = load_dataloader(config)
 
-    [print(i.shape, i.dtype) for i in model.inputs]
-    [print(o.shape, o.dtype) for o in model.outputs]
-    [print(l.name, l.input_shape, l.dtype) for l in model.layers]
-
     if config.mode == 'train':
         model.fit(train_ds, batch_size=config.data.batch_size, epochs=config.train_config.epochs)
+
+        #  model.fit(x=tf.random.uniform(shape=(100, 32000), minval=-1, maxval=1), 
+        #           y=tf.random.uniform(shape=(100, 1), minval=-1, maxval=1, dtype=tf.int32),
+        #           batch_size=2,
+        #           epochs=5)
         
 
 

@@ -4,7 +4,7 @@ model:
 data:
   develop: false
   batch_size: 4
-  root_dir: '/home/tim/Documents/dfki/shared_projects/infant_cries/BabyCry'
+  root_dir: '/netscratch/herzig/datasets/BabyCry'
   shuffle: true
 
 mode: 'train'
