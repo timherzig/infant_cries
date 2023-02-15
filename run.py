@@ -25,10 +25,13 @@ def main(args):
     if config.mode == 'train':
         model.fit(train_ds, batch_size=config.data.batch_size, epochs=config.train_config.epochs)
 
-        #  model.fit(x=tf.random.uniform(shape=(100, 32000), minval=-1, maxval=1), 
-        #           y=tf.random.uniform(shape=(100, 1), minval=-1, maxval=1, dtype=tf.int32),
-        #           batch_size=2,
-        #           epochs=5)
+        checkpoint_dir = os.path.join('checkpoints', f'version_{len(os.listdir('checkpoints')) + 1}')
+        os.makedirs(checkpoint_dir)
+
+        model.save(os.path.join(checkpoint_dir, 'model'))
+
+        OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
+        
         
 
 
