@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -25,13 +26,14 @@ def main(args):
     if config.mode == 'train':
         model.fit(train_ds, batch_size=config.data.batch_size, epochs=config.train_config.epochs)
 
-        checkpoint_dir = os.path.join('checkpoints', f'version_{len(os.listdir('checkpoints')) + 1}')
+        checkpoint_dir = os.path.join('checkpoints', f'version_{len(os.listdir("checkpoints/")) + 1}')
         os.makedirs(checkpoint_dir)
 
         model.save(os.path.join(checkpoint_dir, 'model'))
 
         OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
-        
+    elif config.mode == 'evaluate':
+        print('evaluating')
         
 
 

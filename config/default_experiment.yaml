@@ -10,4 +10,4 @@ data:
 mode: 'train'
 
 train_config:
-  epochs: 2
+  epochs: 20
