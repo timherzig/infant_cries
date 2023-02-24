@@ -48,21 +48,21 @@ def main(args):
                   validation_data=val_ds,
                   batch_size=config.data.batch_size,
                   callbacks=[callback],
-                  epochs=20)
+                  epochs=config.train_config.epochs)
         
         test_results = model.evaluate(test_ds, batch_size=config.data.batch_size)
         
         f = open(checkpoint_dir + '/result.txt', "a")
-        f.write(f'Run {i+1} results: \n')
-        f.write(history.history)
+        f.write(f'Run {str(i+1)} results: \n')
+        f.write(str(history.history))
         f.write('\n\n')
-        f.write(f'Test loss, test f1: {test_results}\n\n')
+        f.write(f'Test loss, test f1: {str(test_results)}\n\n')
         f.close()
 
         f1s = f1s + test_results[1]
     
     f = open(checkpoint_dir + '/result.txt', "a")
-    f.write(f'Average test results: {f1s/config.data.n_fold}\n')
+    f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
     f.close()
     # ------------------------
 
