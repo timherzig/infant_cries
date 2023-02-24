@@ -8,6 +8,10 @@ import tensorflow_io as tfio
 
 from tensorflow import keras
 
+def get_one_hot(targets, nb_classes):
+    res = np.eye(nb_classes)[np.array(targets).reshape(-1)]
+    return res.reshape(list(targets.shape)+[nb_classes])
+
 class BabyCry(keras.utils.Sequence):
 
     def __init__(self, batch_size, root_dir, csv, shuffle):
@@ -32,7 +36,7 @@ class BabyCry(keras.utils.Sequence):
         max_len = max(len(row) for row in audio_batch)
         audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
 
-        label_batch = np.asarray([label for label in batch['label']])
+        label_batch = get_one_hot(np.asarray([label for label in batch['label']]), 2)
 
         return audio_batch, label_batch
 
