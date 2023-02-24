@@ -1,0 +1,14 @@
+model:
+  name: 'https://tfhub.dev/google/trillsson5/1'
+
+data:
+  develop: false
+  batch_size: 4
+  root_dir: '/netscratch/herzig/datasets/BabyCry2'
+  n_fold: 17
+  shuffle: true
+
+mode: 'train'
+
+train_config:
+  epochs: 10
