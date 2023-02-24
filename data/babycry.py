@@ -10,12 +10,12 @@ from tensorflow import keras
 
 class BabyCry(keras.utils.Sequence):
 
-    def __init__(self, batch_size, root_dir, shuffle):
+    def __init__(self, batch_size, root_dir, csv, shuffle):
         self.shuffle = shuffle
         self.batch_size = batch_size
         self.root_dir = root_dir
 
-        self.df = pd.read_csv(os.path.join(root_dir, 'babycry_extracted.csv'))
+        self.df = pd.read_csv(os.path.join(root_dir, csv))
 
         self.df_len = len(self.df.index)
         self.indexes = np.arange(self.df_len)
