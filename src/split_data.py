@@ -1,3 +1,4 @@
+import random
 import librosa
 import numpy as np
 import pandas as pd
@@ -23,9 +24,9 @@ df['id'] = case_number
 # G31 15
 
 test_ids = ['G13', 'J24', 'G29', 'J23', 'J13', 'G31']
-# test_df = df.loc[df['id'].isin(test_ids)]
-# test_df['augmented'] = False
-# test_df.to_csv('BabyCry/test.csv', index=False)
+test_df = df.loc[df['id'].isin(test_ids)]
+test_df['augmented'] = False
+test_df.to_csv('BabyCry/test.csv', index=False)
 # print(test_df)
 
 train_df = df.loc[~df['id'].isin(test_ids)]
@@ -48,12 +49,13 @@ for index, row in train_df.iterrows():
     elif row['label'] == 0:
         augments = np.random.randint(3, size=1)
         for a in augments:
-            audio, sr = librosa.load('BabyCry/' + row['audio'])
-            audio = augment_data(a, audio)
-            audio_file = row['audio'][:-4] + '_aug.wav'
-            sf.write('BabyCry/' + audio_file, np.ravel(audio), sr)
-            new_row = {'audio': audio_file, 'label': row['label'], 'id': row['id'], 'augmented': True}
-            train_df = train_df.append(new_row, ignore_index=True)
+            if (bool(random.getrandbits(1))):
+                audio, sr = librosa.load('BabyCry/' + row['audio'])
+                audio = augment_data(a, audio)
+                audio_file = row['audio'][:-4] + '_aug.wav'
+                sf.write('BabyCry/' + audio_file, np.ravel(audio), sr)
+                new_row = {'audio': audio_file, 'label': row['label'], 'id': row['id'], 'augmented': True}
+                train_df = train_df.append(new_row, ignore_index=True)
             
 
 train_df.to_csv('BabyCry/train.csv', index=False)
