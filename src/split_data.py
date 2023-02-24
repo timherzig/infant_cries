@@ -38,10 +38,12 @@ train_df['augmented'] = False
 for index, row in train_df.iterrows():
     if row['label'] == 1:
         augments = np.random.randint(3, size=2)
+        cnt = 0
         for a in augments:
             audio, sr = librosa.load('BabyCry/' + row['audio'])
             audio = augment_data(a, audio)
-            audio_file = row['audio'][:-4] + '_aug.wav'
+            audio_file = row['audio'][:-4] + '_aug' + str(cnt) +'.wav'
+            cnt = cnt + 1
             sf.write('BabyCry/' +  audio_file, np.ravel(audio), sr)
             new_row = {'audio': audio_file, 'label': row['label'], 'id': row['id'], 'augmented': True}
             train_df = train_df.append(new_row, ignore_index=True)
