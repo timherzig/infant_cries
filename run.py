@@ -28,6 +28,7 @@ def main(args):
                       config.data.root_dir,
                       os.path.join('test.csv'),
                       True)
+    f1s = 0
 
     for i in range(config.data.n_fold):
 
@@ -55,9 +56,14 @@ def main(args):
         f.write(f'Run {i+1} results: \n')
         f.write(history.history)
         f.write('\n\n')
-        f.write(f'Test: {test_results}\n\n')
+        f.write(f'Test loss, test f1: {test_results}\n\n')
         f.close()
-        
+
+        f1s = f1s + test_results[1]
+    
+    f = open(checkpoint_dir + '/result.txt', "a")
+    f.write(f'Average test results: {f1s/config.data.n_fold}\n')
+    f.close()
     # ------------------------
 
 
