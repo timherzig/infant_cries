@@ -38,7 +38,7 @@ class BabyCry(keras.utils.Sequence):
 
         label_batch = np.asarray([label for label in batch['label']])
         l = []
-        for b in self.batch_size:
+        for b in range(self.batch_size):
             z = np.zeros(2, dtype=int)
             z[label_batch[b]] = 1
             l.append(z)
