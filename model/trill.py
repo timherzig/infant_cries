@@ -24,14 +24,16 @@ from keras import layers, losses
 
 # ---------------------------
 
-# def get_f1(y_true, y_pred): #taken from old keras source code
-#     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-#     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-#     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-#     precision = true_positives / (predicted_positives + K.epsilon())
-#     recall = true_positives / (possible_positives + K.epsilon())
-#     f1_val = 2*(precision*recall)/(precision+recall+K.epsilon())
-#     return f1_val
+def get_f1(y_true, y_pred): #taken from old keras source code
+    print('ref: ' + str(y_true))
+    print('pred: ' + str(y_pred))
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    recall = true_positives / (possible_positives + K.epsilon())
+    f1_val = 2*(precision*recall)/(precision+recall+K.epsilon())
+    return f1_val
 
 
 def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
@@ -49,5 +51,5 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
   predictions = layers.Dense(2, activation='softmax')(x)
 
   trill_pretrained = tf.keras.Model(inputs = m.input, outputs = predictions)
-  trill_pretrained.compile(optimizer='adam', loss=losses.SparseCategoricalCrossentropy(), metrics=[tfa.metrics.F1Score(num_classes=2, average=None)])
+  trill_pretrained.compile(optimizer='adam', loss=losses.SparseCategoricalCrossentropy(), metrics=[get_f1])
   return trill_pretrained
