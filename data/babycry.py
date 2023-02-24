@@ -37,11 +37,6 @@ class BabyCry(keras.utils.Sequence):
         audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
 
         label_batch = np.asarray([label for label in batch['label']])
-        # l = []
-        # for b in range(self.batch_size):
-        #     z = np.zeros(2, dtype=int)
-        #     z[label_batch[b]] = 1
-        #     l.append(z)
 
 
         return audio_batch, label_batch
