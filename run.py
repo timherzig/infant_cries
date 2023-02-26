@@ -52,6 +52,9 @@ def main(args):
                            True,
                            True if config.model.name == 'resnet' else False,
                            input_shape=(config.model.h, config.model.w, 3))
+        
+        save_model_dir = checkpoint_dir + '/' + i
+        os.makedirs(save_model_dir)
 
         history = model.fit(train_ds,
                   validation_data=val_ds,
@@ -69,6 +72,7 @@ def main(args):
         f.close()
 
         f1s = f1s + test_results[1]
+        model.save(save_model_dir)
     
     f = open(checkpoint_dir + '/result.txt', "a")
     f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
