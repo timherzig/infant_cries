@@ -25,9 +25,9 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
 
   embeddings = m(input)['embedding']
 
-  x = layers.LSTM(64)(embeddings)
-  x = layers.Flatten()(x)
-  x = layers.Dense(512, activation='relu')(x)
+  x = layers.Flatten()(embeddings)
+  x = layers.Dense(1024, activation='relu')(x)
+  x = layers.Dense(256, activation='relu')(x)
   predictions = layers.Dense(1, activation='sigmoid')(x)
 
   trill_pretrained = tf.keras.Model(inputs = m.input, outputs = predictions)
