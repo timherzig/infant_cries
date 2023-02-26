@@ -37,7 +37,7 @@ def main(args):
         if config.model.name == 'resnet':
             model = resnet(input_shape = (config.model.h, config.model.w, 3))
         else:
-            model = trill(config.model.name)
+            model = trill(config.model.name, config.model.bilstm)
 
         train_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 

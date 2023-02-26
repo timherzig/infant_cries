@@ -1,6 +1,6 @@
 model:
   name: 'https://tfhub.dev/google/nonsemantic-speech-benchmark/trillsson5/1'
-  bilstm: False
+  bilstm: True
   h: 128
   w: 128
 

@@ -15,7 +15,7 @@ def get_f1(y_true, y_pred): #taken from old keras source code
     return f1_val
 
 
-def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
+def trill(model = 'https://tfhub.dev/google/trillsson5/1', bilstm = False):
   input = layers.Input(shape=(None,))
   m = hub.KerasLayer(model)
 
@@ -24,8 +24,13 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
   # audio_samples = tf.zeros([3, 64000])
 
   embeddings = m(input)['embedding']
+  x = embeddings
 
-  x = layers.Flatten()(embeddings)
+  if bilstm:
+     x = tf.stack(x)
+     x = layers.Bidirectional(layers.LSTM(64))(x)
+
+  x = layers.Flatten()(x)
   x = layers.Dense(1024, activation='relu')(x)
   x = layers.Dense(256, activation='relu')(x)
   predictions = layers.Dense(1, activation='sigmoid')(x)
