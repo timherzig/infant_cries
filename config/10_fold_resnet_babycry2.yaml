@@ -1,5 +1,5 @@
 model:
-  name: 'https://tfhub.dev/google/nonsemantic-speech-benchmark/trillsson5/1'
+  name: 'resnet'
   h: 128
   w: 128
 

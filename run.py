@@ -29,13 +29,13 @@ def main(args):
                       os.path.join('test.csv'),
                       True,
                       True if config.model.name == 'resnet' else False,
-                      input_shape=config.model.input_shape)
+                      input_shape=(config.model.h, config.model.w, 3))
     f1s = 0
 
     for i in range(config.data.n_fold):
 
         if config.model.name == 'resnet':
-            model = resnet(input_shape = config.model.input_shape)
+            model = resnet(input_shape = (config.model.h, config.model.w, 3))
         else:
             model = trill(config.model.name)
 
@@ -44,14 +44,14 @@ def main(args):
                            os.path.join(str(config.data.n_fold) + '_fold_split', str(i), 'train.csv'),
                            True,
                            True if config.model.name == 'resnet' else False,
-                           input_shape=config.model.input_shape)
+                           input_shape=(config.model.h, config.model.w, 3))
         
         val_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 
                            os.path.join(str(config.data.n_fold) + '_fold_split', str(i), 'val.csv'),
                            True,
                            True if config.model.name == 'resnet' else False,
-                           input_shape=config.model.input_shape)
+                           input_shape=(config.model.h, config.model.w, 3))
 
         history = model.fit(train_ds,
                   validation_data=val_ds,
