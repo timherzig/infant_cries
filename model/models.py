@@ -25,7 +25,7 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
 
   embeddings = m(input)['embedding']
 
-  x = layers.Bidirectional(layers.LSTM(64))(embeddings)
+  x = layers.LSTM(64)(embeddings)
   x = layers.Flatten()(x)
   x = layers.Dense(512, activation='relu')(x)
   predictions = layers.Dense(1, activation='sigmoid')(x)
