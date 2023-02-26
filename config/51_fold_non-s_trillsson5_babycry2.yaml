@@ -1,0 +1,17 @@
+model:
+  name: 'https://tfhub.dev/google/nonsemantic-speech-benchmark/trillsson5/1'
+  bilstm: False
+  h: 128
+  w: 128
+
+data:
+  develop: false
+  batch_size: 8
+  root_dir: '/netscratch/herzig/datasets/BabyCry2'
+  n_fold: 51
+  shuffle: true
+
+mode: 'train'
+
+train_config:
+  epochs: 10
