@@ -5,25 +5,6 @@ import tensorflow_addons as tfa
 from keras import backend as K
 from keras import layers, losses
 
-# def recall_m(y_true, y_pred):
-#     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-#     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
-#     recall = true_positives / (possible_positives+K.epsilon())
-#     return recall
-
-# def precision_m(y_true, y_pred):
-#     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
-#     predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
-#     precision = true_positives / (predicted_positives+K.epsilon())
-#     return precision
-
-# def f1_m(y_true, y_pred):
-#     precision = precision_m(y_true, y_pred)
-#     recall = recall_m(y_true, y_pred)
-#     return 2*((precision*recall)/(precision+recall+K.epsilon()))
-
-# ---------------------------
-
 def get_f1(y_true, y_pred): #taken from old keras source code
     true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
     possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
@@ -44,10 +25,25 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1'):
 
   embeddings = m(input)['embedding']
 
-  x = layers.Flatten()(embeddings)
-  x = layers.Dense(1000, activation='relu')(x)
+  x = layers.Bidirectional(layers.LSTM(64))(embeddings)
+  x = layers.Flatten()(x)
+  x = layers.Dense(512, activation='relu')(x)
   predictions = layers.Dense(1, activation='sigmoid')(x)
 
   trill_pretrained = tf.keras.Model(inputs = m.input, outputs = predictions)
   trill_pretrained.compile(optimizer='adam', loss=losses.BinaryCrossentropy(), metrics=[get_f1])
   return trill_pretrained
+
+
+def resnet(input_shape):
+  base_model = tf.keras.applications.ResNet152(weights='imagenet', include_top=False, input_shape=input_shape)
+  for layer in base_model.layers:
+    layer.trainable = False
+  
+  x = layers.Flatten()(base_model.output)
+  x = layers.Dense(1000, activation='relu')(x)
+  predictions = layers.Dense(1, activation='sigmoid')(x)
+
+  resnet_pretrained = tf.keras.Model(inputs=base_model.input, outputs=predictions)
+  resnet_pretrained.compile(optimizer='adam', loss=losses.BinaryCrossentropy(), metrics=[get_f1])
+  return resnet_pretrained

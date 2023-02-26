@@ -7,7 +7,7 @@ from omegaconf import OmegaConf
 from argparse import ArgumentParser
 
 #Local
-from model.trill import trill
+from model.models import trill, resnet
 from data.babycry import BabyCry
 
 def main(args):
@@ -27,22 +27,31 @@ def main(args):
     test_ds = BabyCry(config.data.batch_size,
                       config.data.root_dir,
                       os.path.join('test.csv'),
-                      True)
+                      True,
+                      True if config.model.name == 'resnet' else False,
+                      input_shape=config.model.input_shape)
     f1s = 0
 
     for i in range(config.data.n_fold):
 
-        model = trill(config.model.name)
+        if config.model.name == 'resnet':
+            model = resnet(input_shape = config.model.input_shape)
+        else:
+            model = trill(config.model.name)
 
         train_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 
                            os.path.join(str(config.data.n_fold) + '_fold_split', str(i), 'train.csv'),
-                           True)
+                           True,
+                           True if config.model.name == 'resnet' else False,
+                           input_shape=config.model.input_shape)
         
         val_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 
                            os.path.join(str(config.data.n_fold) + '_fold_split', str(i), 'val.csv'),
-                           True)
+                           True,
+                           True if config.model.name == 'resnet' else False,
+                           input_shape=config.model.input_shape)
 
         history = model.fit(train_ds,
                   validation_data=val_ds,

@@ -14,10 +14,12 @@ from tensorflow import keras
 
 class BabyCry(keras.utils.Sequence):
 
-    def __init__(self, batch_size, root_dir, csv, shuffle):
+    def __init__(self, batch_size, root_dir, csv, shuffle, spec = False, input_shape = (1,1,1)):
         self.shuffle = shuffle
         self.batch_size = batch_size
         self.root_dir = root_dir
+        self.spec = spec
+        self.input_shape = input_shape
 
         self.df = pd.read_csv(os.path.join(root_dir, csv))
 
@@ -33,8 +35,11 @@ class BabyCry(keras.utils.Sequence):
 
         audio_batch = [librosa.load(os.path.join(self.root_dir, path), sr=16000)[0] for path in batch['audio']]
 
-        max_len = max(len(row) for row in audio_batch)
-        audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
+        if self.spec:
+            audio_batch = [librosa.feature.melspectogram(x, sr=16000, S=self.input_shape, n_mels=128, fmax=8000) for x in audio_batch]
+        else:
+            max_len = max(len(row) for row in audio_batch)
+            audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
 
         label_batch = np.asarray([label for label in batch['label']])
 
