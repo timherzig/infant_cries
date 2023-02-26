@@ -3,15 +3,15 @@ import pandas as pd
 
 pd.set_option("display.max_rows", None)
 
-splits = 10
-root = os.path.join('BabyCry2', str(splits) + '_fold_split')
+splits = 8
+root = os.path.join('BabyCry3', str(splits) + '_fold_split')
 
-train_df = pd.read_csv('BabyCry2/train.csv')
+train_df = pd.read_csv('BabyCry3/train.csv')
 train_df = train_df.sample(frac=1).reset_index(drop=True)
 
 ids = train_df['id'].value_counts().index.tolist()
 
-val_len = len(train_df.index)//splits
+val_len = len(ids)//splits
 print(val_len)
 
 for split in range(splits):

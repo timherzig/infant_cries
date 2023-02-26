@@ -22,20 +22,43 @@ df['id'] = case_number
 # G21 30
 # G29 22
 # J23 23
+# G24 17
 # J13 17
-# G31 15
-# J28 11
-# G26 11
-# G11 9
-# J09 8
 
-test_ids = ['G13', 'J24', 'J31', 'G21', 'G29', 'J23', 'J13', 'G31', 'J28', 'G26', 'G11', 'J09']
+# EXCLUDE
+# G31    15
+# G07    15
+# G28    14
+# G19    14
+# G30    13
+# G03    13
+# G09    13
+# G16    13
+# G08    13
+# G22    12
+# J28    11
+# G26    11
+# G23    11
+# G05    10
+# G15    10
+# G33    10
+# G12    10
+# G27     9
+# G14     9
+# G11     9
+# J09     8
+# G18     7
+# G04     6
+
+test_ids = ['G13', 'J24', 'J31', 'G21', 'G29', 'J23', 'J13', 'G24']
 test_df = df.loc[df['id'].isin(test_ids)]
 test_df['augmented'] = False
 test_df.to_csv('BabyCry3/test.csv', index=False)
 # print(test_df)
 
-train_df = df.loc[~df['id'].isin(test_ids)]
+exclude =  ['G31','G07','G28','G19','G30','G03','G09','G16','G08','G22','J28','G26','G23','G05','G15','G33','G12','G27','G14','G11','J09','G18','G04'] + test_ids
+
+train_df = df.loc[~df['id'].isin(exclude)]
 train_df['augmented'] = False
 print(train_df['label'].value_counts())
 
