@@ -36,7 +36,7 @@ class BabyCry(keras.utils.Sequence):
         audio_batch = [librosa.load(os.path.join(self.root_dir, path), sr=16000)[0] for path in batch['audio']]
 
         if self.spec:
-            audio_batch = [librosa.feature.melspectrogram(x, sr=16000, S=self.input_shape, n_mels=128, fmax=8000) for x in audio_batch]
+            audio_batch = [librosa.feature.melspectrogram(x, sr=16000, n_mels=self.input_shape[1], fmax=8000)[:self.input_shape[0]] for x in audio_batch]
         else:
             max_len = max(len(row) for row in audio_batch)
             audio_batch = np.array([np.pad(row, (0, max_len-len(row))) for row in audio_batch])
