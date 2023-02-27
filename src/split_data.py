@@ -50,7 +50,7 @@ df['id'] = case_number
 # G18     7
 # G04     6
 
-test_ids = ['G13', 'J24', 'J31', 'G21', 'G29', 'J23', 'J13', 'G24']
+test_ids = ['G13', 'J24', 'J31', 'G17', 'G29', 'J23', 'J13', 'G24']
 test_df = df.loc[df['id'].isin(test_ids)]
 test_df['augmented'] = False
 test_df.to_csv('BabyCry4/test.csv', index=False)
