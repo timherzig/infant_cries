@@ -39,6 +39,7 @@ def main(args):
 
 
     f1s = 0
+    acc = 0
 
     for i in range(config.data.n_fold):
 
@@ -80,14 +81,16 @@ def main(args):
         for t in test_ds:
             test_results = model.evaluate(t[1], batch_size=config.data.batch_size)
             f = open(checkpoint_dir + '/result.txt', "a")
-            f.write(f'{str(t[0])} Test loss, test f1: {str(test_results)}\n\n')
+            f.write(f'{str(t[0])} Test loss, test f1, test accuracy: {str(test_results)}\n\n')
             f.close()
             f1s = f1s + (test_results[1]/len(test_ds))
+            acc = acc + (test_results[2]/len(test_ds))
 
         model.save(save_model_dir)
     
     f = open(checkpoint_dir + '/result.txt', "a")
     f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
+    f.write(f'Average accuracy results: {str(acc/config.data.n_fold)}\n')
     f.close()
     # ------------------------
 
