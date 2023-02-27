@@ -38,7 +38,7 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1', bilstm = False, dropo
   predictions = layers.Dense(1, activation='sigmoid')(x)
 
   trill_pretrained = tf.keras.Model(inputs = m.input, outputs = predictions)
-  trill_pretrained.compile(optimizer='adam', loss=losses.BinaryCrossentropy(), metrics=[get_f1])
+  trill_pretrained.compile(optimizer='adam', loss=losses.BinaryCrossentropy(), metrics=[get_f1, 'accuracy'])
   return trill_pretrained
 
 
