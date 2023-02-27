@@ -62,7 +62,7 @@ def main(args):
                            True if config.model.name == 'resnet' else False,
                            input_shape=(config.model.h, config.model.w, 3))
         
-        save_model_dir = str(checkpoint_dir) + '/' + str(i+1)
+        save_model_dir = str(checkpoint_dir) + '/' + str(i)
         os.makedirs(save_model_dir)
 
         history = model.fit(train_ds,
