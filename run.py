@@ -25,6 +25,12 @@ def main(args):
     OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
 
     test_ds = []
+    full_test = BabyCry(config.data.batch_size,
+                    config.data.root_dir,
+                    'test.csv',
+                    True,
+                    True if config.model.name == 'resnet' else False,
+                    input_shape=(config.model.h, config.model.w, 3))
 
     for id in os.listdir(config.data.root_dir + '/test/'):
         ds = BabyCry(config.data.batch_size,
@@ -83,8 +89,13 @@ def main(args):
             f = open(checkpoint_dir + '/result.txt', "a")
             f.write(f'{str(t[0])} Test loss, test f1, test accuracy: {str(test_results)}\n\n')
             f.close()
-            f1s = f1s + (test_results[1]/len(test_ds))
-            acc = acc + (test_results[2]/len(test_ds))
+        
+        test_results = model.evaluate(full_test, batch_size=config.data.batch_size)
+        f = open(checkpoint_dir + '/result.txt', "a")
+        f.write(f'Full test loss, test f1, test accuracy: {str(test_results)}\n\n')
+        f.close()
+        f1s = f1s + (test_results[1])
+        acc = acc + (test_results[2])
 
         model.save(save_model_dir)
     
