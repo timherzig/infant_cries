@@ -29,7 +29,7 @@ def main(args):
     for id in os.listdir(config.data.root_dir + '/test/'):
         ds = BabyCry(config.data.batch_size,
                         config.data.root_dir,
-                        id,
+                        os.path.join('test', id),
                         True,
                         True if config.model.name == 'resnet' else False,
                         input_shape=(config.model.h, config.model.w, 3))
