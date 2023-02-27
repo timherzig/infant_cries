@@ -21,7 +21,7 @@ def main(args):
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 
     checkpoint_dir = os.path.join('checkpoints', args.config[:-5]) # f'version_{len(os.listdir("checkpoints/")) + 1}')
-    os.makedirs(checkpoint_dir)
+    os.makedirs(checkpoint_dir, exist_ok=True)
     OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
 
     test_ds = []
