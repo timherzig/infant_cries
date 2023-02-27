@@ -20,16 +20,24 @@ def main(args):
     config = OmegaConf.load(args.config)
     callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
 
-    checkpoint_dir = os.path.join('checkpoints', f'version_{len(os.listdir("checkpoints/")) + 1}')
+    checkpoint_dir = os.path.join('checkpoints', args.config[:-5]) # f'version_{len(os.listdir("checkpoints/")) + 1}')
     os.makedirs(checkpoint_dir)
     OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
 
-    test_ds = BabyCry(config.data.batch_size,
-                      config.data.root_dir,
-                      os.path.join('test.csv'),
-                      True,
-                      True if config.model.name == 'resnet' else False,
-                      input_shape=(config.model.h, config.model.w, 3))
+    test_ds = []
+
+    for id in os.listdir(config.data.root_dir + '/test/'):
+        ds = BabyCry(config.data.batch_size,
+                        config.data.root_dir,
+                        id,
+                        True,
+                        True if config.model.name == 'resnet' else False,
+                        input_shape=(config.model.h, config.model.w, 3))
+        id = id[:-4]
+
+        test_ds.append((id, ds))
+
+
     f1s = 0
 
     for i in range(config.data.n_fold):
@@ -37,7 +45,7 @@ def main(args):
         if config.model.name == 'resnet':
             model = resnet(input_shape = (config.model.h, config.model.w, 3))
         else:
-            model = trill(config.model.name, config.model.bilstm)
+            model = trill(config.model.name, config.model.bilstm, config.model.dropout)
 
         train_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 
@@ -62,16 +70,20 @@ def main(args):
                   callbacks=[callback],
                   epochs=config.train_config.epochs)
         
-        test_results = model.evaluate(test_ds, batch_size=config.data.batch_size)
         
         f = open(checkpoint_dir + '/result.txt', "a")
         f.write(f'Run {str(i+1)} results: \n')
         f.write(str(history.history))
         f.write('\n\n')
-        f.write(f'Test loss, test f1: {str(test_results)}\n\n')
         f.close()
 
-        f1s = f1s + test_results[1]
+        for t in test_ds:
+            test_results = model.evaluate(t[1], batch_size=config.data.batch_size)
+            f = open(checkpoint_dir + '/result.txt', "a")
+            f.write(f'{str(t[0])} Test loss, test f1: {str(test_results)}\n\n')
+            f.close()
+            f1s = f1s + (test_results[1]/len(test_ds))
+
         model.save(save_model_dir)
     
     f = open(checkpoint_dir + '/result.txt', "a")
