@@ -9,7 +9,7 @@ data:
   develop: false
   batch_size: 8
   root_dir: '/netscratch/herzig/datasets/BabyCry4-1'
-  n_fold: 25
+  n_fold: 1
   shuffle: true
 
 mode: 'train'

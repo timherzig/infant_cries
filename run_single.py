@@ -54,14 +54,14 @@ def main(args):
 
     train_ds = BabyCry(config.data.batch_size, 
                         config.data.root_dir, 
-                        'train.csv',
+                        'train-single.csv',
                         True,
                         True if config.model.name == 'resnet' else False,
                         input_shape=(config.model.h, config.model.w, 3))
     
     val_ds = BabyCry(config.data.batch_size, 
                         config.data.root_dir, 
-                        'val.csv',
+                        'val-single.csv',
                         True,
                         True if config.model.name == 'resnet' else False,
                         input_shape=(config.model.h, config.model.w, 3))
