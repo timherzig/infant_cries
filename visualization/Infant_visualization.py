@@ -1,8 +1,7 @@
 #
 from argparse import ArgumentParser
-import plotly.io as pio
-pio.renderers.default = "png"
-
+# import plotly.io as pio
+# pio.renderers.default = "png"
 from PIL import Image as PilImage
 
 import numpy as np
@@ -27,10 +26,10 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 
 def main(args):
-    model_builder = keras.applications.xception.Xception
-    img_size = (299, 299)
+    # model_builder = keras.applications.xception.Xception
+    # img_size = (299, 299)
     preprocess_input = keras.applications.xception.preprocess_input
-    decode_predictions = keras.applications.xception.decode_predictions
+    # decode_predictions = keras.applications.xception.decode_predictions
 
     #last_conv_layer_name = "block14_sepconv2_act"
     last_conv_layer_name = "dense"  #Existing layers are: ['input_1', 'keras_layer', 'dropout', 'flatten', 'dense', 'dense_1', 'dense_2']
