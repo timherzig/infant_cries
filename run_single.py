@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import tensorflow as tf
+import keras_tuner as kt
 import tensorflow_hub as hub
 
 from omegaconf import OmegaConf
@@ -18,7 +19,7 @@ def main(args):
     sess = tf.compat.v1.InteractiveSession(config=config)
 
     config = OmegaConf.load(args.config)
-    callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
 
     checkpoint_dir = os.path.join('checkpoints', args.config.split('/')[-1][:-5]) # f'version_{len(os.listdir("checkpoints/")) + 1}')
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -65,6 +66,17 @@ def main(args):
                         True,
                         True if config.model.name == 'resnet' else False,
                         input_shape=(config.model.h, config.model.w, 3))
+    
+    tuner = kt.Hyperband(model,
+                     objective='val_accuracy',
+                     max_epochs=10,
+                     factor=3)
+    
+    tuner.search(train_ds, epochs=50, validation_data=val_ds, callbacks=[callback])
+
+    # Get the optimal hyperparameters
+    best_hps=tuner.get_best_hyperparameters(num_trials=1)[0]
+    model = tuner.hypermodel.build(best_hps)
     
     history = model.fit(train_ds,
                 validation_data=val_ds,
