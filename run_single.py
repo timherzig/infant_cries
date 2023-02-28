@@ -18,7 +18,7 @@ def main(args):
     sess = tf.compat.v1.InteractiveSession(config=config)
 
     config = OmegaConf.load(args.config)
-    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=3)
+    callback = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5)
 
     checkpoint_dir = os.path.join('checkpoints', args.config.split('/')[-1][:-5]) # f'version_{len(os.listdir("checkpoints/")) + 1}')
     os.makedirs(checkpoint_dir, exist_ok=True)
@@ -91,7 +91,7 @@ def main(args):
     f1s = f1s + (test_results[1])
     acc = acc + (test_results[2])
 
-    model.save(save_model_dir)
+    model.save(checkpoint_dir)
     
     f = open(checkpoint_dir + '/result.txt', "a")
     f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
