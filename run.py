@@ -1,4 +1,5 @@
 import os
+import gc
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -47,7 +48,7 @@ def main(args):
     f1s = 0
     acc = 0
 
-    for i in range(config.data.n_fold):
+    for i in range(args.start_at, config.data.n_fold):
 
         if config.model.name == 'resnet':
             model = resnet(input_shape = (config.model.h, config.model.w, 3))
@@ -98,6 +99,12 @@ def main(args):
         acc = acc + (test_results[2])
 
         model.save(save_model_dir)
+
+        del model
+        del train_ds
+        del val_ds
+
+        gc.collect()
     
     f = open(checkpoint_dir + '/result.txt', "a")
     f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
@@ -109,6 +116,7 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--config', type=str, default='config/default_experiment.yaml')
+    parser.add_argument('--start_at', type=int, default=0)
 
     args = parser.parse_args()
     main(args)
