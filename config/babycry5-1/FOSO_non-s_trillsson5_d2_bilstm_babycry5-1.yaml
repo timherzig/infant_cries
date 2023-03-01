@@ -7,7 +7,7 @@ model:
 
 data:
   develop: false
-  batch_size: 8
+  batch_size: 32
   root_dir: '/netscratch/herzig/datasets/BabyCry5-1'
   n_fold: 25
   shuffle: true
