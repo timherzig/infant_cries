@@ -8,9 +8,9 @@ ids_g = ['G02', 'G17', 'G10', 'G16', 'G25', 'G14', 'G27', 'G07', 'G30', 'G28', '
 
 splits = len(ids_g)
 
-root = os.path.join('BabyCry4-1', str(splits) + '_fold_split')
+root = os.path.join('BabyCry5-1', str(splits) + '_fold_split')
 
-train_df = pd.read_csv('BabyCry4-1/train.csv')
+train_df = pd.read_csv('BabyCry5-1/train.csv')
 train_df = train_df.sample(frac=1).reset_index(drop=True)
 
 
@@ -21,25 +21,25 @@ train_df = train_df.sample(frac=1).reset_index(drop=True)
 # print(train_df['id'].unique())
 
 
-# for split in range(splits):
-#     # val_ids = ids[split*val_len:(split+1)*val_len]
+for split in range(splits):
+    # val_ids = ids[split*val_len:(split+1)*val_len]
     
-#     # val = train_df.loc[train_df['id'].isin(val_ids)]
-#     # train = train_df.loc[~train_df['id'].isin(val_ids)]
+    # val = train_df.loc[train_df['id'].isin(val_ids)]
+    # train = train_df.loc[~train_df['id'].isin(val_ids)]
     
-#     # val = train_df.loc[split*val_len:(split+1)*val_len]
-#     # train = pd.concat([val, train_df]).drop_duplicates(keep=False)
-#     g = ids_g.pop()
-#     j = ids_j.pop()
+    # val = train_df.loc[split*val_len:(split+1)*val_len]
+    # train = pd.concat([val, train_df]).drop_duplicates(keep=False)
+    g = ids_g.pop()
+    j = ids_j.pop()
 
-#     val = train_df.loc[(train_df['id'] == g) | (train_df['id'] == j)]
-#     train = train_df.loc[(train_df['id'] != g) & (train_df['id'] != j)]
+    val = train_df.loc[(train_df['id'] == g) | (train_df['id'] == j)]
+    train = train_df.loc[(train_df['id'] != g) & (train_df['id'] != j)]
 
-#     save_loc = os.path.join(root, str(split))
-#     os.makedirs(save_loc)
+    save_loc = os.path.join(root, str(split))
+    os.makedirs(save_loc)
 
-#     val.to_csv(os.path.join(save_loc, 'val.csv'), index=False)
-#     train.to_csv(os.path.join(save_loc, 'train.csv'), index=False)
+    val.to_csv(os.path.join(save_loc, 'val.csv'), index=False)
+    train.to_csv(os.path.join(save_loc, 'train.csv'), index=False)
 
 
 
