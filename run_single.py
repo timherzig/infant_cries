@@ -103,6 +103,7 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument('--config', type=str, default='config/default_experiment.yaml')
+    parser.add_argument('--start_at', type=int, default=0)
 
     args = parser.parse_args()
     main(args)
