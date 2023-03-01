@@ -70,7 +70,7 @@ def main(args):
                            input_shape=(config.model.h, config.model.w, 3))
         
         save_model_dir = str(checkpoint_dir) + '/' + str(i)
-        os.makedirs(save_model_dir)
+        os.makedirs(save_model_dir, exist_ok=True)
 
         history = model.fit(train_ds,
                   validation_data=val_ds,
