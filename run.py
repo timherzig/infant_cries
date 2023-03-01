@@ -25,6 +25,10 @@ def main(args):
     os.makedirs(checkpoint_dir, exist_ok=True)
     OmegaConf.save(config=config, f=os.path.join(checkpoint_dir, 'config.yaml'))
 
+    # Create a MirroredStrategy.
+    strategy = tf.distribute.MirroredStrategy()
+    print("Number of devices: {}".format(strategy.num_replicas_in_sync))
+
     test_ds = []
     full_test = BabyCry(config.data.batch_size,
                     config.data.root_dir,
@@ -51,9 +55,11 @@ def main(args):
     for i in range(args.start_at, config.data.n_fold):
 
         if config.model.name == 'resnet':
-            model = resnet(input_shape = (config.model.h, config.model.w, 3))
+            with strategy.scope():
+                model = resnet(input_shape = (config.model.h, config.model.w, 3))
         else:
-            model = trill(config.model.name, config.model.bilstm, config.model.dropout)
+            with strategy.scope():
+                model = trill(config.model.name, config.model.bilstm, config.model.dropout)
 
         train_ds = BabyCry(config.data.batch_size, 
                            config.data.root_dir, 
