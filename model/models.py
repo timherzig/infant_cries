@@ -24,6 +24,7 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1', bilstm = False, dropo
   # audio_samples = tf.zeros([3, 64000])
 
   embeddings = m(input)['embedding']
+  embeddings = tf.expand_dims(embeddings, axis=1)
   x = layers.Conv1D(1, 1)(embeddings)
   x = layers.Dropout(dropout)(x) # embeddings
 
