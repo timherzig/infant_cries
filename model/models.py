@@ -29,7 +29,7 @@ def trill(model = 'https://tfhub.dev/google/trillsson5/1', bilstm = False, dropo
   x = layers.Dropout(dropout)(x) # embeddings
 
   if bilstm:
-    x = tf.expand_dims(x, axis=1)
+    # x = tf.expand_dims(x, axis=1)
     x = layers.Bidirectional(layers.LSTM(64))(x)
     x = layers.Flatten()(x)
   else:
