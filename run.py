@@ -3,6 +3,7 @@ import gc
 import numpy as np
 import tensorflow as tf
 import tensorflow_hub as hub
+from keras import backend as K
 
 from omegaconf import OmegaConf
 from argparse import ArgumentParser
@@ -105,6 +106,7 @@ def main(args):
         del val_ds
 
         gc.collect()
+        K.clear_session()
     
     f = open(checkpoint_dir + '/result.txt', "a")
     f.write(f'Average test results: {str(f1s/config.data.n_fold)}\n')
